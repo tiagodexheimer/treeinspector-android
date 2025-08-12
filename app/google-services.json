@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "587723148153",
+    "firebase_url": "https://treeinspector-9c98a-default-rtdb.firebaseio.com",
+    "project_id": "treeinspector-9c98a",
+    "storage_bucket": "treeinspector-9c98a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:587723148153:android:398e4ffccf3b9968e6fda8",
+        "android_client_info": {
+          "package_name": "com.dexheimer.treeinspector_android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "587723148153-cg3g7ed770h6i48c5mh90ah7sqt9p8bp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dexheimer.treeinspector_android",
+            "certificate_hash": "c3bd650d755ea9372294efcde26993444e00333c"
+          }
+        },
+        {
+          "client_id": "587723148153-nbkqu72dfe8nguvugbv4iudjd40ktav9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlnxBWNSfuFay0z7BDuf8m4VhC9mJjDZQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "587723148153-f7atptq55nv6eiad7n0lsgn0545n616p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

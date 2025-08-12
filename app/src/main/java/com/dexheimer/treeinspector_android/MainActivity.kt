@@ -66,11 +66,16 @@ class MainActivity : AppCompatActivity() {
 		signInLauncher.launch(signInIntent)
 	}
 
-	// Função chamada quando o login é bem-sucedido.
 	private fun handleSignInSuccess(account: GoogleSignInAccount) {
 		Log.d("LOGIN_SUCESSO", "Nome: ${account.displayName}, Email: ${account.email}, ID: ${account.id}")
 		Toast.makeText(this, "Login bem-sucedido: ${account.displayName}", Toast.LENGTH_LONG).show()
 
-		// TODO: Navegar para a tela de Dashboard.
+		// --- CORREÇÃO AQUI ---
+		// Cria a "intenção" de ir da tela atual (this) para a DashboardActivity
+		val intent = Intent(this, DashboardActivity::class.java)
+		// Executa a navegação
+		startActivity(intent)
+		// Fecha a tela de login para o usuário não conseguir voltar para ela
+		finish()
 	}
 }

@@ -28,5 +28,13 @@
             android:layout_marginTop="4dp"
             android:text="Status: Pendente" />
 
+        <TextView
+            android:id="@+id/textViewAddresses"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Endereços:"
+            android:textStyle="italic" />
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>

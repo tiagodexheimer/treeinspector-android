@@ -1,13 +1,19 @@
 package com.dexheimer.treeinspector_android
 
 import com.google.firebase.firestore.DocumentId
+import com.google.firebase.firestore.Exclude
 
-// Classe modelo para os dados do Firestore
 data class Route(
-	// Anotação para pegar o ID do documento automaticamente
 	@DocumentId
 	val id: String = "",
 
-	// O nome do campo deve ser igual ao do Firestore ("nome")
-	val nome: String = ""
+	val nome: String = "",
+
+	// Mapeia a lista de IDs do Firestore
+	val solicitacoesIds: List<String> = emptyList(),
+
+	// Esta lista NÃO será lida do Firestore, nós a preencheremos com código.
+	// Ela guardará os detalhes completos de cada solicitação.
+	@get:Exclude
+	var solicitacoes: MutableList<Solicitacao> = mutableListOf()
 )

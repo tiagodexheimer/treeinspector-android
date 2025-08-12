@@ -6,16 +6,16 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class DashboardActivity : AppCompatActivity() {
 
-	// Inicializa o Firestore
 	private val db = Firebase.firestore
 	private lateinit var recyclerView: RecyclerView
-	private lateinit var routeList: ArrayList<Route>
 	private lateinit var adapter: RouteAdapter
+	private var routeList = mutableListOf<Route>()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -24,32 +24,48 @@ class DashboardActivity : AppCompatActivity() {
 		recyclerView = findViewById(R.id.recyclerViewRoutes)
 		recyclerView.layoutManager = LinearLayoutManager(this)
 
-		routeList = arrayListOf()
 		adapter = RouteAdapter(routeList)
 		recyclerView.adapter = adapter
 
-		fetchRoutesFromFirestore()
+		fetchRoutesAndSolicitacoes()
 	}
 
-	private fun fetchRoutesFromFirestore() {
-		// Acessa a coleção "rotas" no Firestore
-		db.collection("rotas")
-			.get() // Pede para buscar todos os documentos da coleção
-			.addOnSuccessListener { documents ->
-				routeList.clear() // Limpa a lista antes de adicionar novos itens
-				// Itera sobre cada documento retornado
-				for (document in documents) {
-					// Converte o documento em um objeto da nossa classe Route
-					val route = document.toObject(Route::class.java)
-					routeList.add(route)
-					Log.d("FIRESTORE_SUCCESS", "Rota lida: ${route.nome}")
+	private fun fetchRoutesAndSolicitacoes() {
+		db.collection("rotas").get()
+			.addOnSuccessListener { routeDocuments ->
+				if (routeDocuments.isEmpty) {
+					Toast.makeText(this, "Nenhuma rota encontrada.", Toast.LENGTH_SHORT).show()
+					return@addOnSuccessListener
 				}
-				// Notifica o adapter que os dados mudaram, para atualizar a lista na tela
-				adapter.notifyDataSetChanged()
+
+				// Transforma os documentos de rotas em objetos
+				val routes = routeDocuments.toObjects(Route::class.java)
+				val allSolicitacaoTasks = mutableListOf<com.google.android.gms.tasks.Task<*>>()
+
+				for (route in routes) {
+					// Se a rota tem IDs de solicitação, busca os detalhes
+					if (route.solicitacoesIds.isNotEmpty()) {
+						val solicitacoesTask = db.collection("solicitacoes")
+							.whereIn("__name__", route.solicitacoesIds) // Busca todos os docs com os IDs da lista
+							.get()
+							.addOnSuccessListener { solicitacaoDocuments ->
+								// Preenche a lista de solicitações detalhadas dentro do objeto da rota
+								route.solicitacoes = solicitacaoDocuments.toObjects(Solicitacao::class.java)
+							}
+						allSolicitacaoTasks.add(solicitacoesTask)
+					}
+				}
+
+				// Espera TODAS as buscas de solicitações terminarem
+				Tasks.whenAll(allSolicitacaoTasks).addOnCompleteListener {
+					routeList.clear()
+					routeList.addAll(routes)
+					adapter.notifyDataSetChanged() // Atualiza a tela com todos os dados
+					Log.d("FIRESTORE", "Todas as rotas e solicitações foram carregadas.")
+				}
 			}
 			.addOnFailureListener { exception ->
-				// Em caso de erro
-				Log.w("FIRESTORE_ERROR", "Erro ao buscar documentos: ", exception)
+				Log.w("FIRESTORE_ERROR", "Erro ao buscar rotas: ", exception)
 				Toast.makeText(this, "Erro ao buscar rotas.", Toast.LENGTH_SHORT).show()
 			}
 	}
