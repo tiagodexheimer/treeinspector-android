@@ -9,11 +9,12 @@ data class Route(
 
 	val nome: String = "",
 
-	// Mapeia a lista de IDs do Firestore
+	// Adicionamos este campo para ler a lista otimizada do Firestore
+	val ordemOtimizada: List<String> = emptyList(),
+
+	// Mantemos o campo antigo por segurança, mas não o usaremos na lógica principal
 	val solicitacoesIds: List<String> = emptyList(),
 
-	// Esta lista NÃO será lida do Firestore, nós a preencheremos com código.
-	// Ela guardará os detalhes completos de cada solicitação.
 	@get:Exclude
 	var solicitacoes: MutableList<Solicitacao> = mutableListOf()
 )

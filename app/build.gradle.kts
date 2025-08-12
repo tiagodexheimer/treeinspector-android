@@ -3,6 +3,7 @@ plugins {
 	alias(libs.plugins.kotlin.android)
 	// Adicione esta linha para APLICAR o plugin no módulo 'app'
 	id("com.google.gms.google-services")
+	alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
 }
 
 android {
@@ -35,6 +36,9 @@ android {
 	kotlinOptions {
 		jvmTarget = "11"
 	}
+	buildFeatures {
+		viewBinding = true
+	}
 }
 
 dependencies {
@@ -55,4 +59,8 @@ dependencies {
 
 	// Dependência do Cloud Firestore
 	implementation("com.google.firebase:firebase-firestore-ktx")
+
+	// Dependências para o Google Maps SDK
+	implementation("com.google.android.gms:play-services-maps:18.2.0")
+	implementation("com.google.android.gms:play-services-location:21.3.0")
 }

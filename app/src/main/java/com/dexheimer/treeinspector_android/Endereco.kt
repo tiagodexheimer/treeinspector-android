@@ -5,5 +5,7 @@ data class Endereco(
 	val rua: String = "",
 	val numero: String = "",
 	val bairro: String = "",
-	val cidade: String = ""
+	val cidade: String = "",
+	val lat: Double = 0.0,
+	val lng: Double = 0.0
 )
